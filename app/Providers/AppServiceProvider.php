@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as BladeView;
 use Laravel\Passport\Client;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->booted(function (): void {
+            Passport::authorizationView('auth.oauth-authorize');
+        });
+
         View::composer('omni::dashboard.index', function (BladeView $view): void {
             $applications = Client::query()
                 ->where('revoked', false)
