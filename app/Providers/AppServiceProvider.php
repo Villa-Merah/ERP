@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ManagedClientController;
 use App\Http\Controllers\UserRoleController;
+use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\ClientController;
 use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            ClientController::class,
+            ManagedClientController::class,
+        );
         $this->app->bind(
             UserController::class,
             UserRoleController::class,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\ManagedClientController;
 use App\Http\Controllers\SsoProfileController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,7 @@ Route::middleware('auth')->group(function (): void {
 Route::post('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'/users', [UserRoleController::class, 'store'])
     ->middleware(['auth', 'omni.admin', 'throttle:20,1'])
     ->name('omni.dashboard.users.store');
+
+Route::post('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'/clients/{client}/secret', [ManagedClientController::class, 'regenerateSecret'])
+    ->middleware(['auth', 'omni.admin', 'throttle:10,1'])
+    ->name('omni.dashboard.clients.secret');
