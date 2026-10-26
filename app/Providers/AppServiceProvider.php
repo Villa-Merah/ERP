@@ -8,6 +8,7 @@ use App\Http\Middleware\UserDashboardMiddleware;
 use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\ClientController;
 use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\UserController;
 use DeveloperAwam\OmniCentralAuth\Http\Middleware\OmniUserMiddleware;
+use DeveloperAwam\OmniCentralAuth\Models\AuditLog;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as BladeView;
@@ -63,6 +64,15 @@ class AppServiceProvider extends ServiceProvider
                 });
 
             $view->with('applications', $applications);
+            if (auth()->check() && ! auth()->user()->isOmniAdmin()) {
+                $view->with('stats', [
+                    'logins_today' => AuditLog::query()
+                        ->where('user_id', auth()->id())
+                        ->where('event', 'login')
+                        ->whereDate('occurred_at', today())
+                        ->count(),
+                ]);
+            }
         });
     }
 }

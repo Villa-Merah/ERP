@@ -1,0 +1,1 @@
+@include('omni::dashboard.index')

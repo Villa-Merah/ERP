@@ -34,14 +34,14 @@
     </section>
     <dl class="portal-stats">
         <div class="portal-stat"><dt>Aplikasi terdaftar</dt><dd>{{ $applications->count() }} <span class="text-xs font-normal">ruang kerja</span></dd></div>
-        <div class="portal-stat"><dt>Login hari ini</dt><dd>{{ $stats['logins_today'] }} <span class="text-xs font-normal">aktivitas</span></dd></div>
+        <div class="portal-stat"><dt>{{ auth()->user()->isOmniAdmin() ? 'Login hari ini' : 'Login Anda hari ini' }}</dt><dd>{{ $stats['logins_today'] }} <span class="text-xs font-normal">aktivitas</span></dd></div>
         <div class="portal-stat"><dt>Peran Anda</dt><dd>{{ ucwords(auth()->user()->role) }}</dd></div>
         <div class="portal-stat"><dt>Sesi akun</dt><dd><span class="text-green-600 text-sm">●</span> Terhubung</dd></div>
     </dl>
     <section id="aplikasi" style="scroll-margin-top: 24px;">
         <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
             <div><h2 class="text-lg font-semibold">Aplikasi Anda <span class="text-sm text-gray-400 ml-2">{{ $applications->count() }}</span></h2><p class="text-xs text-gray-500 mt-1">Aplikasi SSO terdaftar yang belum dinonaktifkan.</p></div>
-            @if(config('omni-central-auth.dashboard.features.clients'))
+            @if(auth()->user()->isOmniAdmin() && config('omni-central-auth.dashboard.features.clients'))
                 <a href="{{ route('omni.dashboard.clients.index') }}" class="text-sm text-gray-500 hover:text-green-700">Kelola aplikasi ↗</a>
             @endif
         </div>
@@ -58,9 +58,8 @@
                     @endif
                 </article>
             @empty
-                <div class="col-span-full text-center rounded-xl border border-dashed border-gray-300 p-12"><h3 class="font-semibold">Belum ada aplikasi terhubung</h3><p class="text-sm text-gray-500 mt-2">Daftarkan aplikasi melalui menu OAuth Clients untuk menampilkannya di sini.</p></div>
+                <div class="col-span-full text-center rounded-xl border border-dashed border-gray-300 p-12"><h3 class="font-semibold">Belum ada aplikasi terhubung</h3><p class="text-sm text-gray-500 mt-2">{{ auth()->user()->isOmniAdmin() ? 'Daftarkan aplikasi melalui menu OAuth Clients untuk menampilkannya di sini.' : 'Hubungi superadmin untuk menghubungkan aplikasi ke portal SSO.' }}</p></div>
             @endforelse
         </div>
     </section>
 </x-omni::layouts.dashboard>
-
