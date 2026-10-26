@@ -42,6 +42,11 @@ class User extends Authenticatable implements OAuthenticatable
         return $this->role === 'superadmin';
     }
 
+    public function isOmniUser(): bool
+    {
+        return ! $this->isOmniAdmin() && in_array($this->role, self::ROLES, true);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

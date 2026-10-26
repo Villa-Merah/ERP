@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Http\Controllers\ManagedClientController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Middleware\UserDashboardMiddleware;
 use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\ClientController;
 use DeveloperAwam\OmniCentralAuth\Http\Controllers\Dashboard\UserController;
+use DeveloperAwam\OmniCentralAuth\Http\Middleware\OmniUserMiddleware;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as BladeView;
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            OmniUserMiddleware::class,
+            UserDashboardMiddleware::class,
+        );
         $this->app->bind(
             ClientController::class,
             ManagedClientController::class,
