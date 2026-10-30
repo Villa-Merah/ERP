@@ -24,6 +24,14 @@ Route::post('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'
     ->middleware(['auth', 'omni.admin', 'throttle:20,1'])
     ->name('omni.dashboard.users.store');
 
+Route::get('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'/users/{user}/edit', [UserRoleController::class, 'edit'])
+    ->middleware(['auth', 'omni.admin'])
+    ->name('omni.dashboard.users.edit');
+
+Route::put('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'/users/{user}', [UserRoleController::class, 'update'])
+    ->middleware(['auth', 'omni.admin', 'throttle:20,1'])
+    ->name('omni.dashboard.users.update');
+
 Route::post('/'.config('omni-central-auth.dashboard.prefix', 'omni-dashboard').'/clients/{client}/secret', [ManagedClientController::class, 'regenerateSecret'])
     ->middleware(['auth', 'omni.admin', 'throttle:10,1'])
     ->name('omni.dashboard.clients.secret');
