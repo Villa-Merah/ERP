@@ -16,4 +16,14 @@ class ExampleTest extends TestCase
 
         $response->assertRedirect(route('login'));
     }
+
+    public function test_login_page_has_an_accessible_password_visibility_toggle(): void
+    {
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertSee('id="password-visibility-toggle"', false)
+            ->assertSee('aria-label="Tampilkan kata sandi"', false)
+            ->assertSee('data-icon="hidden"', false)
+            ->assertSee('password.type = isVisible ? \'text\' : \'password\';', false);
+    }
 }
