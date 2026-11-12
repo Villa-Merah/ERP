@@ -12,6 +12,24 @@ class UserDashboardAccessTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_authenticated_users_opening_login_reach_their_dashboard(): void
+    {
+        foreach (User::ROLES as $role) {
+            $user = User::factory()->create(['role' => $role]);
+            $dashboard = $user->isOmniAdmin()
+                ? route('omni.dashboard.index')
+                : route('user.dashboard');
+
+            $this->actingAs($user)->get('/login')->assertRedirect($dashboard);
+            $this->get($dashboard)->assertOk();
+        }
+    }
+
+    public function test_guest_can_open_login(): void
+    {
+        $this->get('/login')->assertOk();
+    }
+
     public function test_all_regular_roles_can_open_user_dashboard_without_admin_access(): void
     {
         foreach (array_diff(User::ROLES, ['superadmin']) as $role) {
